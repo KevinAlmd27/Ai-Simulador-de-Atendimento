@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulação</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0f0f, #1a1a2e);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .chat-box {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            height: 450px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 12px;
+        }
+
+        .ai {
+            background: rgba(0,150,255,0.2);
+        }
+
+        .seller {
+            background: rgba(0,255,150,0.2);
+            text-align: right;
+        }
+
+        .feedback {
+            background: rgba(255, 200, 0, 0.2);
+            border-left: 4px solid gold;
+        }
+
+        .btn-send {
+            background: linear-gradient(90deg,#00bfff,#007bff);
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+
+    <h2 class="mb-4">Simulação de Atendimento</h2>
+
+    <div class="chat-box">
+
+        <div th:each="msg : ${trainingSession.messages}">
+
+            <!-- IA -->
+            <div th:if="${msg.sender.name() == 'AI_CLIENT'}"
+                 class="message ai"
+                 th:text="${msg.content}">
+            </div>
+
+            <!-- VENDEDOR -->
+            <div th:if="${msg.sender.name() == 'SELLER'}"
+                 class="message seller"
+                 th:text="${msg.content}">
+            </div>
+
+            <!-- FEEDBACK -->
+            <div th:if="${msg.sender.name() == 'AI_FEEDBACK'}"
+                 class="message feedback"
+                 th:text="${msg.content}">
+            </div>
+
+        </div>
+
+    </div>
+
+    <form th:action="@{/simulator}" method="post">
+
+        <input type="hidden"
+               name="sessionId"
+               th:value="${trainingSession.id}" />
+
+        <div class="mb-3">
+            <textarea name="answer"
+                      class="form-control"
+                      rows="3"
+                      placeholder="Digite sua resposta..."
+                      required></textarea>
+        </div>
+
+        <button type="submit"
+                class="btn btn-send btn-lg text-white w-100">
+            Enviar Resposta
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
