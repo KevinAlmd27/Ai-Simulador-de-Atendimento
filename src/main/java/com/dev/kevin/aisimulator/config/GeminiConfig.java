@@ -2,16 +2,20 @@ package com.dev.kevin.aisimulator.config;
 
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GeminiConfig {
 
+    @Value("${google.api.key}")
+    private String apiKey;
+
     @Bean
     public ChatModel chatModel() {
         return GoogleAiGeminiChatModel.builder()
-                .apiKey("AIzaSyAPkv6xvi36gHAji8XyxtCj_YzQNAzIBLs")
+                .apiKey(apiKey)
                 .modelName("gemini-2.5-flash")
                 .temperature(0.3)
                 .build();
